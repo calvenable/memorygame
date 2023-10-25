@@ -1,0 +1,49 @@
+body {
+    text-align: center;
+    margin: 100px 20% 200px 20%;
+    background-color:aliceblue;
+}
+
+.column {
+    float: left;
+    width: 50%;
+}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.scoreBox {
+    background-color: white;
+    padding: 20px;
+}
+
+#score, #highscore {
+    font-size: xx-large;
+}
+
+button {
+    margin: 20px;
+    padding: 5px;
+    width: 90px;
+    height: 45px;
+    border-radius: 6px;
+    background-color:whitesmoke;
+}
+
+#redBtn {
+    border: 3px red solid;
+}
+
+#greenBtn {
+    border: 3px green solid;
+}
+
+#yellowBtn {
+    border: 3px gold solid;
+}
+
+#blueBtn {
+    border: 3px blue solid;
+}
