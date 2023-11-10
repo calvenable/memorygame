@@ -1,5 +1,6 @@
 // TODO: Improve CSS
 // TODO: Add key bindings so 1234 can be used instead of clicking
+// TODO: Add highscore to localstorage to save progress
 
 const colours = ['red', 'yellow', 'green', 'blue'];
 let startingColours = [...colours]; // Shallow copy
@@ -95,7 +96,7 @@ async function buttonPressed(colour) {
     if (acceptingInput) {
         acceptingInput = false;
         setColour(colour);
-        await sleep(150);
+        await sleep(200);
         clearColour(colour);
         inputSequence.push(colour);
 
@@ -135,12 +136,14 @@ function setColour(colour) {
     // Set a button's background colour to its flashing state
     let button = document.getElementById(colour + 'Btn');
     button.style.backgroundColor = flashColours[colour];
+    button.classList.add("selected");
 }
 
 function clearColour(colour) {
     // Set a button's background colour back to its default
     let button = document.getElementById(colour + 'Btn');
     button.style.backgroundColor = defaultColour;
+    button.classList.remove("selected");
 }
 
 
