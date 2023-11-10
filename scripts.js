@@ -69,22 +69,24 @@ async function displaySequence() {
         setColour(currentSequence[i]);
         await sleep(sleepLength);
         clearColour(currentSequence[i]);
-        await sleep(sleepLength);
+        if (i < sequenceLength - 1) {
+            await sleep(sleepLength);
+        }
     }
     statusLabel.innerHTML = 'Now repeat what you saw!';
     acceptingInput = true;
 }
 
 function getSleepLength(sequenceLength) {
-    // Determine how long to wait betwen flashing each colour in the sequence
+    // Determine how long to wait between flashing each colour in the sequence
     if (sequenceLength < 5) {
-        return 700;
+        return 600;
     }
     else if (sequenceLength < 10) {
-        return 550;
+        return 450;
     }
     else {
-        return 400;
+        return 300;
     }
 }
 

@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    margin: 100px 20% 200px 20%;
+    margin: 5vh 15vw 10vh;
     background-color:aliceblue;
 }
 
@@ -26,24 +26,34 @@ body {
 button {
     margin: 20px;
     padding: 5px;
-    width: 90px;
-    height: 45px;
-    border-radius: 6px;
+    border-radius: 3px;
     background-color:whitesmoke;
 }
 
+#startBtn {
+    width: 100px;
+    height: 60px;
+}
+
+button.colour {
+    width: 14vw;
+    height: 15vw;
+    border-width: 8px;
+    border-style: solid;
+}
+
 #redBtn {
-    border: 3px red solid;
+    border-color: red;
 }
 
 #greenBtn {
-    border: 3px green solid;
+    border-color: green;
 }
 
 #yellowBtn {
-    border: 3px gold solid;
+    border-color: gold;
 }
 
 #blueBtn {
-    border: 3px blue solid;
+    border-color: blue;
 }
