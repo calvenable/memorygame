@@ -96,7 +96,7 @@ async function buttonPressed(colour) {
     if (acceptingInput) {
         acceptingInput = false;
         setColour(colour);
-        await sleep(200);
+        await sleep(300);
         clearColour(colour);
         inputSequence.push(colour);
 
