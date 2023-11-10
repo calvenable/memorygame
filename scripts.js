@@ -20,9 +20,15 @@ let score = 0;
 let highscore = 0;
 let acceptingInput = false;
 
-let status = document.getElementById('status');
-let scoreCounter = document.getElementById('score');
-let highscoreCounter = document.getElementById('highscore');
+let statusLabel;
+let scoreCounter;
+let highscoreCounter;
+
+function getElements() {
+    statusLabel = document.getElementById('status');
+    scoreCounter = document.getElementById('score');
+    highscoreCounter = document.getElementById('highscore');
+}
 
 function start() {
     // Reset variables and start a new sequence
@@ -35,7 +41,7 @@ function start() {
     highscoreCounter.innerHTML = highscore;
 
     currentSequence.push(newColour());
-    status.innerHTML = 'Watch carefully...';
+    statusLabel.innerHTML = 'Watch carefully...';
     displaySequence();
 }
 
@@ -61,7 +67,7 @@ async function displaySequence() {
         clearColour(currentSequence[i]);
         await sleep(700);
     }
-    status.innerHTML = 'Now repeat what you saw!';
+    statusLabel.innerHTML = 'Now repeat what you saw!';
     acceptingInput = true;
 }
 
@@ -85,16 +91,16 @@ async function buttonPressed(colour) {
 
                 inputSequence = [];
                 currentSequence.push(newColour());
-                status.innerHTML = 'That\'s right!';
+                statusLabel.innerHTML = 'That\'s right!';
                 acceptingInput = false;
                 await sleep(1000);
-                status.innerHTML = 'Watch carefully...';
+                statusLabel.innerHTML = 'Watch carefully...';
                 await sleep(600);
                 displaySequence();
             }
         } else {
             // Mistake! End the game.
-            status.innerHTML = '<em>Oh no! That wasn\'t right!</em>';
+            statusLabel.innerHTML = '<em>Oh no! That wasn\'t right!</em>';
             gameEnd = false;
             acceptingInput = false;
             await sleep(1000);
