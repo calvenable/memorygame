@@ -1,7 +1,5 @@
-//TODO: Correct endgame clearing of sequence so it doesn't run on after death
-//   To replicate, enter correct sequence but double-click last button
-//TODO: Make sequence display speed up as score increases
-//TODO: Add key bindings so 1234 can be used instead of clicking
+// TODO: Improve CSS
+// TODO: Add key bindings so 1234 can be used instead of clicking
 
 const colours = ['red', 'yellow', 'green', 'blue'];
 let startingColours = [...colours]; // Shallow copy
@@ -24,13 +22,16 @@ let statusLabel;
 let scoreCounter;
 let highscoreCounter;
 
+const sleep = ms => new Promise(res => setTimeout(res, ms))
+
 function getElements() {
+    // onLoad, fetch elements that we will want to modify
     statusLabel = document.getElementById('status');
     scoreCounter = document.getElementById('score');
     highscoreCounter = document.getElementById('highscore');
 }
 
-function start() {
+async function start() {
     // Reset variables and start a new sequence
     score = 0;
     startingColours = [...colours];
@@ -42,6 +43,7 @@ function start() {
 
     currentSequence.push(newColour());
     statusLabel.innerHTML = 'Watch carefully...';
+    await sleep(800);
     displaySequence();
 }
 
@@ -61,21 +63,37 @@ function newColour() {
 
 async function displaySequence() {
     // Flash each colour in the current sequence
-    for (let i = 0; i < currentSequence.length; i++) {
+    const sequenceLength = currentSequence.length;
+    const sleepLength = getSleepLength(sequenceLength);
+    for (let i = 0; i < sequenceLength; i++) {
         setColour(currentSequence[i]);
-        await sleep(700);
+        await sleep(sleepLength);
         clearColour(currentSequence[i]);
-        await sleep(700);
+        await sleep(sleepLength);
     }
     statusLabel.innerHTML = 'Now repeat what you saw!';
     acceptingInput = true;
 }
 
+function getSleepLength(sequenceLength) {
+    // Determine how long to wait betwen flashing each colour in the sequence
+    if (sequenceLength < 5) {
+        return 700;
+    }
+    else if (sequenceLength < 10) {
+        return 550;
+    }
+    else {
+        return 400;
+    }
+}
+
 async function buttonPressed(colour) {
     // Submit a button press and check for end of sequence / incorrect submission
     if (acceptingInput) {
+        acceptingInput = false;
         setColour(colour);
-        await sleep(700);
+        await sleep(150);
         clearColour(colour);
         inputSequence.push(colour);
 
@@ -91,18 +109,19 @@ async function buttonPressed(colour) {
 
                 inputSequence = [];
                 currentSequence.push(newColour());
-                statusLabel.innerHTML = 'That\'s right!';
-                acceptingInput = false;
+                statusLabel.innerHTML = "That's right!";
                 await sleep(1000);
                 statusLabel.innerHTML = 'Watch carefully...';
                 await sleep(600);
                 displaySequence();
             }
+            else {
+                acceptingInput = true;
+            }
         } else {
             // Mistake! End the game.
-            statusLabel.innerHTML = '<em>Oh no! That wasn\'t right!</em>';
+            statusLabel.innerHTML = "<em>Oh no! That wasn't right!</em>";
             gameEnd = false;
-            acceptingInput = false;
             await sleep(1000);
             showStartButton();
         }
@@ -125,17 +144,13 @@ function clearColour(colour) {
 
 function hideStartButton() {
     // Hide the start button while the game is in progress
-    let stBtn = document.getElementById('startBtn');
-    stBtn.style.visibility = 'hidden';
+    let startButton = document.getElementById('startBtn');
+    startButton.style.visibility = 'hidden';
 }
 
 function showStartButton() {
     // Show the start button at the end of the game
-    let stBtn = document.getElementById('startBtn');
-    stBtn.style.visibility = 'visible';
-    stBtn.innerHTML = 'Start New Game';
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    let startButton = document.getElementById('startBtn');
+    startButton.style.visibility = 'visible';
+    startButton.innerHTML = 'Start New Game';
 }
