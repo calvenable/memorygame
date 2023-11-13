@@ -135,17 +135,23 @@ async function buttonPressed(colour) {
 }
 
 function setColour(colour) {
-    // Set a button's background colour to its flashing state
-    let button = document.getElementById(colour + 'Btn');
-    button.style.backgroundColor = flashColours[colour];
-    button.classList.add("selected");
+    applyButtonColour(colour);
 }
 
 function clearColour(colour) {
-    // Set a button's background colour back to its default
+    applyButtonColour(colour, clear=true);
+}
+
+function applyButtonColour(colour, clear = false) {
+    // Set a button's background colour to its flashing or default state
     let button = document.getElementById(colour + 'Btn');
-    button.style.backgroundColor = defaultColour;
-    button.classList.remove("selected");
+    button.style.backgroundColor = clear ? defaultColour : flashColours[colour];
+    if (clear) {
+        button.classList.remove("selected");
+    }
+    else {
+        button.classList.add("selected");
+    }
 }
 
 

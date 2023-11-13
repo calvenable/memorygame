@@ -77,3 +77,12 @@ button, .buttons div {
     width: 5vw;
     height: 5vw;
 }
+
+*.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -ms-user-select: none;
+    user-select: none;
+ }
