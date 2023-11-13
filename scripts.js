@@ -29,7 +29,7 @@ function getElements() {
     statusLabel = document.getElementById('status');
     scoreCounter = document.getElementById('score');
     highscoreCounter = document.getElementById('highscore');
-    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName);
+    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName) || 0;
 }
 
 async function start() {
@@ -41,7 +41,7 @@ async function start() {
     hideStartButton();
     await showHappyFaces();
     scoreCounter.innerHTML = score;
-    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName);
+    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName) || 0;
 
     currentSequence.push(newColour());
     statusLabel.innerHTML = 'Watch carefully...';
