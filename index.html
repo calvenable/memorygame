@@ -1,47 +1,51 @@
 <html>
 <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>Memory Game</title>
     <link rel="stylesheet" href="styles.css">
     <script src="scripts.js"></script>
 </head>
 <body onload="getElements()">
-    <h1>Memory Game</h1>
-    <h2>Watch the pattern, and copy it back!</h2>
 
-    <div class="row">
-        <div class="column">
-            <div class="scoreBox">
-                <h3>Current score:</h3>
-                <p id="score">0</p>
-            </div>
+    <div class="topheader">
+        <div class="left">
+            <p>Memory Game</p>
         </div>
-        <div class="column">
-            <div class="scoreBox">
-                <h3>Highscore:</h3>
-                <p id="highscore">0</p>
-            </div>
+        <div class="right">
+            <p id="score">Score: 0</p>
         </div>
     </div>
 
-    <h2 id="status">Press Start to begin</h2>
-    <button id="startBtn" onclick="start()">Start</button>
+    <div class="subheader">
+        <div class="left">
+            <p>Watch the pattern, and copy it back!</p>
+        </div>
+        <div class="right">
+            <p id="highscore">Highscore: 0</p>
+        </div>
+    </div>
 
-    <div class="buttons">
-        <div class="colour" id="redBtn" onclick="buttonPressed('red')">
-            <img unselectable="on" draggable="false" class="unselectable happy" src="src/face1.png"/>
-            <img unselectable="on" draggable="false" class="unselectable sad" src="src/face1sad.png" hidden/>
-        </div>
-        <div class="colour" id="greenBtn" onclick="buttonPressed('green')">
-            <img unselectable="on" draggable="false" class="unselectable happy" src="src/face2.png"/>
-            <img unselectable="on" draggable="false" class="unselectable sad" src="src/face2sad.png" hidden/>
-        </div>
-        <div class="colour" id="yellowBtn" onclick="buttonPressed('yellow')">
-            <img unselectable="on" draggable="false" class="unselectable happy" src="src/face3.png"/>
-            <img unselectable="on" draggable="false" class="unselectable sad" src="src/face3sad.png" hidden/>
-        </div>
-        <div class="colour" id="blueBtn" onclick="buttonPressed('blue')">
-            <img unselectable="on" draggable="false" class="unselectable happy" src="src/face4.png"/>
-            <img unselectable="on" draggable="false" class="unselectable sad" src="src/face4sad.png" hidden/>
+    <div class="content">
+        <h2 id="status">Press Start to begin</h2>
+        <button id="startBtn" onclick="start()">Start</button>
+    
+        <div class="buttons">
+            <div class="colour" id="redBtn" onclick="buttonPressed('red')">
+                <img unselectable="on" draggable="false" class="unselectable happy" src="src/face1.png"/>
+                <img unselectable="on" draggable="false" class="unselectable sad" src="src/face1sad.png" hidden/>
+            </div>
+            <div class="colour" id="greenBtn" onclick="buttonPressed('green')">
+                <img unselectable="on" draggable="false" class="unselectable happy" src="src/face2.png"/>
+                <img unselectable="on" draggable="false" class="unselectable sad" src="src/face2sad.png" hidden/>
+            </div>
+            <div class="colour" id="yellowBtn" onclick="buttonPressed('yellow')">
+                <img unselectable="on" draggable="false" class="unselectable happy" src="src/face3.png"/>
+                <img unselectable="on" draggable="false" class="unselectable sad" src="src/face3sad.png" hidden/>
+            </div>
+            <div class="colour" id="blueBtn" onclick="buttonPressed('blue')">
+                <img unselectable="on" draggable="false" class="unselectable happy" src="src/face4.png"/>
+                <img unselectable="on" draggable="false" class="unselectable sad" src="src/face4sad.png" hidden/>
+            </div>
         </div>
     </div>
 </body>

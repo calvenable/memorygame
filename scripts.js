@@ -1,5 +1,6 @@
 // TODO: Improve CSS
 // TODO: Add key bindings so 1234 can be used instead of clicking
+// TODO: Allow playing with the characters when a game is not in progress
 
 const colours = ['red', 'yellow', 'green', 'blue'];
 let startingColours = [...colours]; // Shallow copy
@@ -29,7 +30,7 @@ function getElements() {
     statusLabel = document.getElementById('status');
     scoreCounter = document.getElementById('score');
     highscoreCounter = document.getElementById('highscore');
-    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName) || 0;
+    highscoreCounter.innerHTML = getHighscoreDisplayText(localStorage.getItem(highscoreLocalStorageName) || 0);
 }
 
 async function start() {
@@ -40,8 +41,8 @@ async function start() {
     inputSequence = [];
     hideStartButton();
     await showHappyFaces();
-    scoreCounter.innerHTML = score;
-    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName) || 0;
+    scoreCounter.innerHTML = getScoreDisplayText(score);
+    highscoreCounter.innerHTML = getHighscoreDisplayText(localStorage.getItem(highscoreLocalStorageName) || 0);
 
     currentSequence.push(newColour());
     statusLabel.innerHTML = 'Watch carefully...';
@@ -105,10 +106,10 @@ async function buttonPressed(colour) {
             if (inputSequence.length == currentSequence.length) {
                 // Completed current sequence!
                 score++;
-                scoreCounter.innerHTML = score;
+                scoreCounter.innerHTML = getScoreDisplayText(score);
                 if (score > localStorage.getItem(highscoreLocalStorageName)) {
                     localStorage.setItem(highscoreLocalStorageName, score);
-                    highscoreCounter.innerHTML = '<strong>' + score + '</strong>';
+                    highscoreCounter.innerHTML = getHighscoreDisplayText(score, true);
                 }
 
                 inputSequence = [];
@@ -132,6 +133,19 @@ async function buttonPressed(colour) {
         }
     }
 
+}
+
+function getScoreDisplayText(score) {
+    return "Current score: " + score;
+}
+
+function getHighscoreDisplayText(highscore, isNew = false) {
+    if (isNew) {
+        return "Highscore: <strong>" + highscore + "</strong>"
+    }
+    else {
+        return "Highscore: " + highscore;
+    }
 }
 
 function setColour(colour) {
