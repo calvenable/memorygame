@@ -1,6 +1,5 @@
 // TODO: Improve CSS
 // TODO: Add key bindings so 1234 can be used instead of clicking
-// TODO: Add highscore to localstorage to save progress
 
 const colours = ['red', 'yellow', 'green', 'blue'];
 let startingColours = [...colours]; // Shallow copy
@@ -11,12 +10,12 @@ const flashColours = {
     'blue': '#14bcff'
 }
 const defaultColour = '#ffffff';
+const highscoreLocalStorageName = "hs";
 
 let currentSequence = [];
 let inputSequence = [];
 
 let score = 0;
-let highscore = 0;
 let acceptingInput = false;
 
 let statusLabel;
@@ -30,6 +29,7 @@ function getElements() {
     statusLabel = document.getElementById('status');
     scoreCounter = document.getElementById('score');
     highscoreCounter = document.getElementById('highscore');
+    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName);
 }
 
 async function start() {
@@ -41,7 +41,7 @@ async function start() {
     hideStartButton();
     await showHappyFaces();
     scoreCounter.innerHTML = score;
-    highscoreCounter.innerHTML = highscore;
+    highscoreCounter.innerHTML = localStorage.getItem(highscoreLocalStorageName);
 
     currentSequence.push(newColour());
     statusLabel.innerHTML = 'Watch carefully...';
@@ -106,9 +106,9 @@ async function buttonPressed(colour) {
                 // Completed current sequence!
                 score++;
                 scoreCounter.innerHTML = score;
-                if (score > highscore) {
-                    highscore = score;
-                    highscoreCounter.innerHTML = '<strong>' + highscore + '</strong>';
+                if (score > localStorage.getItem(highscoreLocalStorageName)) {
+                    localStorage.setItem(highscoreLocalStorageName, score);
+                    highscoreCounter.innerHTML = '<strong>' + score + '</strong>';
                 }
 
                 inputSequence = [];
