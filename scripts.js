@@ -5,12 +5,12 @@
 const colours = ['red', 'yellow', 'green', 'blue'];
 let startingColours = [...colours]; // Shallow copy
 const flashColours = {
-    'red': 'red',
-    'green': 'green',
-    'yellow': 'gold',
-    'blue': 'blue'
+    'red': '#ff4c4c',
+    'green': '#21eb21',
+    'yellow': '#dbdf1a',
+    'blue': '#14bcff'
 }
-const defaultColour = 'whitesmoke';
+const defaultColour = '#ffffff';
 
 let currentSequence = [];
 let inputSequence = [];
@@ -39,6 +39,7 @@ async function start() {
     currentSequence = [];
     inputSequence = [];
     hideStartButton();
+    await showHappyFaces();
     scoreCounter.innerHTML = score;
     highscoreCounter.innerHTML = highscore;
 
@@ -124,6 +125,7 @@ async function buttonPressed(colour) {
         } else {
             // Mistake! End the game.
             statusLabel.innerHTML = "<em>Oh no! That wasn't right!</em>";
+            await hideHappyFaces();
             gameEnd = false;
             await sleep(1000);
             showStartButton();
@@ -158,4 +160,23 @@ function showStartButton() {
     let startButton = document.getElementById('startBtn');
     startButton.style.visibility = 'visible';
     startButton.innerHTML = 'Start New Game';
+}
+
+async function showHappyFaces() {
+    await setFaces(true);
+}
+
+async function hideHappyFaces() {
+    await setFaces(false);
+}
+
+async function setFaces(toHappy) {
+    let happyFaces = document.getElementsByClassName("happy");
+    let sadFaces = document.getElementsByClassName("sad");
+
+    for (let i=0; i<happyFaces.length; i++) {
+        happyFaces[i].hidden = !toHappy;
+        sadFaces[i].hidden = toHappy;
+        await sleep(100);
+    }
 }

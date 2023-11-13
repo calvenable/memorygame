@@ -26,11 +26,23 @@
     <h2 id="status">Press Start to begin</h2>
     <button id="startBtn" onclick="start()">Start</button>
 
-    <div class="Buttons">
-        <button class="colour" id="redBtn" onclick="buttonPressed('red')"></button>
-        <button class="colour" id="greenBtn" onclick="buttonPressed('green')"></button>
-        <button class="colour" id="yellowBtn" onclick="buttonPressed('yellow')"></button>
-        <button class="colour" id="blueBtn" onclick="buttonPressed('blue')"></button>
+    <div class="buttons">
+        <div class="colour" id="redBtn" onclick="buttonPressed('red')">
+            <img class="happy" src="src/face1.png"/>
+            <img class="sad" src="src/face1sad.png" hidden/>
+        </div>
+        <div class="colour" id="greenBtn" onclick="buttonPressed('green')">
+            <img class="happy" src="src/face2.png"/>
+            <img class="sad" src="src/face2sad.png" hidden/>
+        </div>
+        <div class="colour" id="yellowBtn" onclick="buttonPressed('yellow')">
+            <img class="happy" src="src/face3.png"/>
+            <img class="sad" src="src/face3sad.png" hidden/>
+        </div>
+        <div class="colour" id="blueBtn" onclick="buttonPressed('blue')">
+            <img class="happy" src="src/face4.png"/>
+            <img class="sad" src="src/face4sad.png" hidden/>
+        </div>
     </div>
 </body>
 </html>

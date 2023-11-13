@@ -1,7 +1,7 @@
 body {
     text-align: center;
     margin: 5vh 15vw 10vh;
-    background-color:aliceblue;
+    background-color:#ffd3f3;
 }
 
 .column {
@@ -27,11 +27,11 @@ body {
     font-size: xx-large;
 }
 
-button {
+button, .buttons div {
     margin: 20px;
     padding: 5px;
     border-radius: 4px;
-    background-color:whitesmoke;
+    background-color:white;
 }
 
 #startBtn {
@@ -39,33 +39,41 @@ button {
     height: 60px;
 }
 
-button.colour {
+.buttons .colour {
+    float: left;
     width: 12vw;
     height: 15vw;
     border-width: 8px;
     border-style: solid;
     margin-top: 20px;
     transition: width .3s, height .3s, margin-top .3s;
+
+    text-align: center;
 }
 
-button.selected {
-    /*width: 15vw !important;*/
+.buttons .selected {
     height: 16vw !important;
     margin-top: 0px !important;
 }
 
 #redBtn {
-    border-color: red;
+    border-color: #ff4c4c;
+    margin-left: 5vw;
 }
 
 #greenBtn {
-    border-color: green;
+    border-color: #21eb21;
 }
 
 #yellowBtn {
-    border-color: gold;
+    border-color: #dbdf1a;
 }
 
 #blueBtn {
-    border-color: blue;
+    border-color: #14bcff;
+}
+
+.buttons div img {
+    width: 5vw;
+    height: 5vw;
 }
