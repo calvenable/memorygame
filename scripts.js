@@ -81,6 +81,8 @@ let statusLabel;
 let scoreCounter;
 let highscoreCounter;
 
+let demoCursor = true;
+
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 
 function getElements() {
@@ -104,6 +106,7 @@ async function start() {
     currentSequence = [];
     inputSequence = [];
     inputQueue.reset();
+    demoCursor = true;
 
     hideStartButton();
     await showHappyFaces();
@@ -310,7 +313,7 @@ async function createDemoCursor(colour) {
     targetDiv.appendChild(cursorElement);
 
     await sleep(800);
-    cursorElement.classList.remove("hidden");
+    if (demoCursor) cursorElement.classList.remove("hidden");
 
     await sleep(800);
     cursorElement.classList.add("clicking");
@@ -320,12 +323,11 @@ async function createDemoCursor(colour) {
     await sleep(1000);
     cursorElement.classList.add("hidden");
     await sleep(500);
-    if (cursorElement) {
-        targetDiv.removeChild(cursorElement);
-    }
+    targetDiv.removeChild(cursorElement);
 }
 
 async function hideDemoCursor() {
+    demoCursor = false;
     let cursorMaybe = document.getElementsByClassName("cursor")[0];
     if (cursorMaybe) {
         cursorMaybe.classList.add("hidden");
