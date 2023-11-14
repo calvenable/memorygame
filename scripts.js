@@ -1,4 +1,6 @@
-// TODO: Improve CSS
+// TODO: Animations for other button
+// TODO: Add variety in filler text messages
+// TODO: Add clicks to a process queue to avoid rate limiting
 // TODO: Add key bindings so 1234 can be used instead of clicking
 // TODO: Allow playing with the characters when a game is not in progress
 
@@ -136,7 +138,7 @@ async function buttonPressed(colour) {
 }
 
 function getScoreDisplayText(score) {
-    return "Current score: " + score;
+    return "Score: " + score;
 }
 
 function getHighscoreDisplayText(highscore, isNew = false) {
