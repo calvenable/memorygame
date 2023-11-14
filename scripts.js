@@ -1,6 +1,7 @@
-// TODO: Add key bindings so 1234 can be used instead of clicking
 // TODO: Add mouse click pointer image to first shape
 // TODO: Add a 'hard mode' with 5 colours
+// TODO: Add an info modal to the start page
+// TODO: Make header fixed so visible when scrolled
 
 class Queue {
     constructor() { this._items = []; }

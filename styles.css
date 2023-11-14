@@ -4,10 +4,6 @@ body {
 }
 
 .topheader {
-    /* Attempt at a fixed header (to see score when scrolled)
-    position: fixed;
-    top: 0; */
-    width: 100%;
     background-color: #ffffff;
     overflow: hidden;
     font-size: 2.5rem;
@@ -51,6 +47,9 @@ button {
     background-color:white;
     transition: opacity .5s, width 1s, height .5s, margin .5s;
 }
+button:not(.fadeout) {
+    cursor: pointer;
+}
 button:hover:not(.fadeout) {
     height: 50px;
     margin: 25px;
@@ -83,6 +82,7 @@ button.fadeout {
     border-radius: 5%;
     /* border-radius: 50% for the rememberos */
     
+    cursor: pointer;
     background-color:white;
 
     display: inline-block;
