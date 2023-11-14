@@ -1,4 +1,3 @@
-// TODO: Animations for other button
 // TODO: Add variety in filler text messages
 // TODO: Add clicks to a process queue to avoid rate limiting
 // TODO: Add key bindings so 1234 can be used instead of clicking
@@ -174,14 +173,14 @@ function applyButtonColour(colour, clear = false) {
 function hideStartButton() {
     // Hide the start button while the game is in progress
     let startButton = document.getElementById('startBtn');
-    startButton.style.visibility = 'hidden';
+    startButton.classList.add('fadeout');
 }
 
 function showStartButton() {
     // Show the start button at the end of the game
     let startButton = document.getElementById('startBtn');
-    startButton.style.visibility = 'visible';
-    startButton.innerHTML = 'Start New Game';
+    startButton.classList.remove('fadeout');
+    startButton.innerHTML = 'Play again';
 }
 
 async function showHappyFaces() {
