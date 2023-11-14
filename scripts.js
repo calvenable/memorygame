@@ -1,5 +1,5 @@
-// TODO: Add a 'hard mode' with 5 colours
 // TODO: Add an info modal to the start page
+// TODO: Add a 'hard mode' with 5 colours
 // TODO: Make header fixed so visible when scrolled
 
 class Queue {
@@ -64,7 +64,8 @@ const flashColours = {
     'red': '#ff4c4c',
     'green': '#21eb21',
     'yellow': '#dbdf1a',
-    'blue': '#14bcff'
+    'blue': '#14bcff',
+    'purple': 'd014ff'
 }
 const defaultColour = '#ffffff';
 const highscoreLocalStorageName = "hs";
