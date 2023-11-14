@@ -24,9 +24,12 @@ class AutoQueue extends Queue {
   }
 
   async dequeue() {
+      if (this._halt) {
+        super.dequeue();
+        return false;
+      }
     if (this._pendingPromise) return false;
     let item = super.dequeue();
-    if (this._halt) return false;
     if (!item) return false;
 
     try {
@@ -47,8 +50,8 @@ class AutoQueue extends Queue {
     this._halt = true;
   }
   reset() {
+    this._halt = true;
     while (this._items.length) {
-        this._pendingPromise = false;
         this.dequeue();
     }
     this._halt = false;
