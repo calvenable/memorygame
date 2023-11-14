@@ -2,6 +2,59 @@
 // TODO: Add key bindings so 1234 can be used instead of clicking
 // TODO: Add mouse click pointer image to first shape
 
+class Queue {
+    constructor() { this._items = []; }
+    enqueue(item) { this._items.push(item); }
+    dequeue()     { return this._items.shift(); }
+    get size()    { return this._items.length; }
+  }
+
+class AutoQueue extends Queue {
+  constructor() {
+    super();
+    this._pendingPromise = false;
+    this._halt = false;
+  }
+
+  enqueue(action) {
+    return new Promise((resolve, reject) => {
+      super.enqueue({ action, resolve, reject });
+      this.dequeue();
+    });
+  }
+
+  async dequeue() {
+    if (this._pendingPromise) return false;
+    let item = super.dequeue();
+    if (this._halt) return false;
+    if (!item) return false;
+
+    try {
+      this._pendingPromise = true;
+      let payload = await item.action(this);
+      this._pendingPromise = false;
+      item.resolve(payload);
+    } catch (e) {
+      this._pendingPromise = false;
+      item.reject(e);
+    } finally {
+      this.dequeue();
+    }
+    return true;
+  }
+
+  halt() {
+    this._halt = true;
+  }
+  reset() {
+    while (this._items.length) {
+        this._pendingPromise = false;
+        this.dequeue();
+    }
+    this._halt = false;
+  }
+}
+
 const colours = ['red', 'yellow', 'green', 'blue'];
 let startingColours = [...colours]; // Shallow copy
 const flashColours = {
@@ -15,6 +68,7 @@ const highscoreLocalStorageName = "hs";
 
 let currentSequence = [];
 let inputSequence = [];
+let inputQueue = new AutoQueue();
 
 let score = 0;
 let gameInProgress = false;
@@ -24,7 +78,7 @@ let statusLabel;
 let scoreCounter;
 let highscoreCounter;
 
-const sleep = ms => new Promise(res => setTimeout(res, ms))
+const sleep = ms => new Promise(res => setTimeout(res, ms));
 
 function getElements() {
     // onLoad, fetch elements that we will want to modify
@@ -45,6 +99,7 @@ async function start() {
     startingColours = [...colours];
     currentSequence = [];
     inputSequence = [];
+    inputQueue.reset();
 
     hideStartButton();
     await showHappyFaces();
@@ -60,31 +115,36 @@ async function start() {
 function newColour() {
     // Return a random colour to add to the sequence
     // If in the first four moves, take a colour from startingColours instead
-    if (score < 4) {
-        let newColour = startingColours[Math.floor(Math.random() * startingColours.length)];
+    if (score < colours.length) {
+        let newColour = pickRandomFromArray(startingColours);
         let index = startingColours.indexOf(newColour);
         if (index > -1) {
             startingColours.splice(index, 1);
         }
         return newColour;
     }
-    return colours[Math.floor(Math.random() * colours.length)];
+    return pickRandomFromArray(colours);
 }
 
 async function displaySequence() {
     // Flash each colour in the current sequence
     const sequenceLength = currentSequence.length;
     const sleepLength = getSleepLength(sequenceLength);
-    for (let i = 0; i < sequenceLength; i++) {
-        setColour(currentSequence[i]);
-        await sleep(sleepLength);
-        clearColour(currentSequence[i]);
-        if (i < sequenceLength - 1) {
-            await sleep(sleepLength);
-        }
-    }
+    await t(sequenceLength, sleepLength);
     statusLabel.innerHTML = randomRepeatMessage();
     acceptingInput = true;
+}
+
+async function t(sqLen, spLen) {
+    for (let i = 0; i < sqLen; i++) {
+        setColour(currentSequence[i]);
+        await sleep(spLen);
+        clearColour(currentSequence[i]);
+        if (i < sqLen - 1) {
+            await sleep(spLen);
+        }
+    }
+    return;
 }
 
 function getSleepLength(sequenceLength) {
@@ -101,43 +161,9 @@ function getSleepLength(sequenceLength) {
 }
 
 async function buttonPressed(colour) {
-    // Submit a button press and check for end of sequence / incorrect submission
+    // Submit a button press
     if (acceptingInput) {
-        acceptingInput = false;
-        setColour(colour);
-        await sleep(300);
-        clearColour(colour);
-        inputSequence.push(colour);
-
-        if (inputSequence[inputSequence.length - 1] == currentSequence[inputSequence.length - 1]) {
-            if (inputSequence.length == currentSequence.length) {
-                // Completed current sequence!
-                score++;
-                scoreCounter.innerHTML = getScoreDisplayText(score);
-                if (score > localStorage.getItem(highscoreLocalStorageName)) {
-                    localStorage.setItem(highscoreLocalStorageName, score);
-                    highscoreCounter.innerHTML = getHighscoreDisplayText(score, true);
-                }
-
-                inputSequence = [];
-                currentSequence.push(newColour());
-                statusLabel.innerHTML = randomSuccessMessage();
-                await sleep(1000);
-                statusLabel.innerHTML = 'Watch carefully...';
-                await sleep(600);
-                displaySequence();
-            }
-            else {
-                acceptingInput = true;
-            }
-        } else {
-            // Mistake! End the game.
-            statusLabel.innerHTML = "<em>" + randomFailMessage() + "</em>";
-            await hideHappyFaces();
-            await sleep(1000);
-            showStartButton();
-            gameInProgress = false;
-        }
+        inputQueue.enqueue(async _ => {await processInput(colour)});
     }
     else if (!gameInProgress) {
         showHappyFace(colour);
@@ -145,7 +171,49 @@ async function buttonPressed(colour) {
         await sleep(300);
         clearColour(colour);
     }
+}
 
+async function processInput(colour) {
+    // show button press and check for end of sequence / incorrect submission
+    setColour(colour);
+    await sleep(300);
+    clearColour(colour);
+    await sleep(50);
+    inputSequence.push(colour);
+
+    if (inputSequence[inputSequence.length - 1] == currentSequence[inputSequence.length - 1]) {
+        if (inputSequence.length == currentSequence.length) {
+            // Completed current sequence!
+            acceptingInput = false;
+            score++;
+            scoreCounter.innerHTML = getScoreDisplayText(score);
+            if (score > localStorage.getItem(highscoreLocalStorageName)) {
+                localStorage.setItem(highscoreLocalStorageName, score);
+                highscoreCounter.innerHTML = getHighscoreDisplayText(score, true);
+            }
+
+            inputSequence = [];
+            inputQueue.reset();
+            currentSequence.push(newColour());
+            statusLabel.innerHTML = randomSuccessMessage();
+            await sleep(1000);
+            statusLabel.innerHTML = 'Watch carefully...';
+            await sleep(600);
+            displaySequence();
+        }
+        else {
+            acceptingInput = true;
+        }
+    } else {
+        // Mistake! End the game.
+        acceptingInput = false;
+        inputQueue.halt();
+        statusLabel.innerHTML = "<em>" + randomFailMessage() + "</em>";
+        await hideHappyFaces();
+        await sleep(1000);
+        showStartButton();
+        gameInProgress = false;
+    }
 }
 
 function getScoreDisplayText(score) {

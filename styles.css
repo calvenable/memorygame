@@ -4,6 +4,10 @@ body {
 }
 
 .topheader {
+    /* Attempt at a fixed header (to see score when scrolled)
+    position: fixed;
+    top: 0; */
+    width: 100%;
     background-color: #ffffff;
     overflow: hidden;
     font-size: 2.5rem;
