@@ -92,8 +92,6 @@ button.fadeout {
 
 .buttons .selected {
     height: 330px;
-    /* margin-top: 50px !important; */
-    /* width: 10vw !important; */
 }
 
 #redBtn {
@@ -112,10 +110,31 @@ button.fadeout {
     border-color: #14bcff;
 }
 
-.buttons div img {
+.buttons div img:not(.cursor) {
     width: 5vw;
     height: 5vw;
     margin-top: 15%;
+}
+
+.cursor {
+    width: 50px;
+    opacity: 100%;
+    display: block;
+    margin-right: 15%;
+    margin-top: 50px;
+    margin-left: auto;
+    transition: opacity .5s, margin-top .5s, margin-right .5s, width .5s;
+}
+
+.cursor.hidden {
+    opacity: 0%;
+    margin-top: 100px;
+}
+
+.cursor.clicking {
+    margin-right: 18%;
+    margin-top: 45px;
+    width: 46px;
 }
 
 *.unselectable {
@@ -134,7 +153,7 @@ button.fadeout {
     .subheader {
         font-size: 1rem;
     }
-    .buttons div img {
+    .buttons div img:not(.cursor) {
         width: 10vw;
         height: 10vw;
     }
@@ -156,6 +175,20 @@ button.fadeout {
         margin-left: 0px;
         margin-right: 0px;
     }
+
+    .cursor {
+        width: 40px;
+        margin-right: 5%;
+        margin-top: 25px;
+    }
+    .cursor.hidden {
+        margin-top: 40px;
+    }
+    .cursor.clicking {
+        width: 35px;
+        margin-right: 9%;
+        margin-top: 21px;
+    }
  }
 
  @media screen and (max-width: 470px) {
@@ -171,7 +204,7 @@ button.fadeout {
     .subheader {
         font-size: .9rem;
     }
-    .buttons div img {
+    .buttons div img:not(.cursor) {
         width: 15vw;
         height: 15vw;
     }
@@ -180,5 +213,19 @@ button.fadeout {
     }
     .buttons .selected {
         height: 110px;
+    }
+
+    .cursor {
+        width: 30px;
+        margin-right: 5%;
+        margin-top: 20px;
+    }
+    .cursor.hidden {
+        margin-top: 50px;
+    }
+    .cursor.clicking {
+        margin-right: 9%;
+        margin-top: 17px;
+        width: 25px;
     }
  }

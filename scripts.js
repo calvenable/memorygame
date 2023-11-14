@@ -1,4 +1,3 @@
-// TODO: Add mouse click pointer image to first shape
 // TODO: Add a 'hard mode' with 5 colours
 // TODO: Add an info modal to the start page
 // TODO: Make header fixed so visible when scrolled
@@ -135,21 +134,20 @@ async function displaySequence() {
     // Flash each colour in the current sequence
     const sequenceLength = currentSequence.length;
     const sleepLength = getSleepLength(sequenceLength);
-    await t(sequenceLength, sleepLength);
-    statusLabel.innerHTML = randomRepeatMessage();
-    acceptingInput = true;
-}
-
-async function t(sqLen, spLen) {
-    for (let i = 0; i < sqLen; i++) {
+    for (let i = 0; i < sequenceLength; i++) {
         setColour(currentSequence[i]);
-        await sleep(spLen);
+        await sleep(sleepLength);
         clearColour(currentSequence[i]);
-        if (i < sqLen - 1) {
-            await sleep(spLen);
+        if (i < sequenceLength - 1) {
+            await sleep(sleepLength);
         }
     }
-    return;
+    statusLabel.innerHTML = randomRepeatMessage();
+    acceptingInput = true;
+
+    if (sequenceLength == 1) {
+        createDemoCursor(currentSequence[0]);
+    }
 }
 
 function getSleepLength(sequenceLength) {
@@ -180,6 +178,8 @@ async function buttonPressed(colour) {
 
 async function processInput(colour) {
     // show button press and check for end of sequence / incorrect submission
+    hideDemoCursor();
+
     setColour(colour);
     await sleep(300);
     clearColour(colour);
@@ -296,6 +296,40 @@ function showHappyFace(colour) {
     let buttonDiv = document.getElementById(colour + "Btn");
     buttonDiv.getElementsByClassName('happy')[0].hidden = false;
     buttonDiv.getElementsByClassName('sad')[0].hidden = true;
+}
+
+async function createDemoCursor(colour) {
+    // Create a mouse cursor that demonstrates the user clicking on the given shape
+    let targetDiv = document.getElementById(colour + "Btn");
+    let cursorElement = document.createElement("img");
+    cursorElement.draggable = false;
+    cursorElement.classList.add("unselectable");
+    cursorElement.classList.add("cursor");
+    cursorElement.classList.add("hidden");
+    cursorElement.src = "src/cursor.png";
+    targetDiv.appendChild(cursorElement);
+
+    await sleep(800);
+    cursorElement.classList.remove("hidden");
+
+    await sleep(800);
+    cursorElement.classList.add("clicking");
+    await sleep(500);
+    cursorElement.classList.remove("clicking");
+
+    await sleep(1000);
+    cursorElement.classList.add("hidden");
+    await sleep(500);
+    if (cursorElement) {
+        targetDiv.removeChild(cursorElement);
+    }
+}
+
+async function hideDemoCursor() {
+    let cursorMaybe = document.getElementsByClassName("cursor")[0];
+    if (cursorMaybe) {
+        cursorMaybe.classList.add("hidden");
+    }
 }
 
 function handleKeyPress(evt) {
