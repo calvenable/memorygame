@@ -1,6 +1,6 @@
-// TODO: Add clicks to a process queue to avoid rate limiting
 // TODO: Add key bindings so 1234 can be used instead of clicking
 // TODO: Add mouse click pointer image to first shape
+// TODO: Add a 'hard mode' with 5 colours
 
 class Queue {
     constructor() { this._items = []; }
@@ -58,7 +58,7 @@ class AutoQueue extends Queue {
   }
 }
 
-const colours = ['red', 'yellow', 'green', 'blue'];
+const colours = ['red', 'green', 'yellow', 'blue'];
 let startingColours = [...colours]; // Shallow copy
 const flashColours = {
     'red': '#ff4c4c',
@@ -89,6 +89,7 @@ function getElements() {
     scoreCounter = document.getElementById('score');
     highscoreCounter = document.getElementById('highscore');
     highscoreCounter.innerHTML = getHighscoreDisplayText(localStorage.getItem(highscoreLocalStorageName) || 0);
+    document.addEventListener('keydown', (evt) => {handleKeyPress(evt)});
 }
 
 async function start() {
@@ -220,10 +221,12 @@ async function processInput(colour) {
 }
 
 function getScoreDisplayText(score) {
+    // Get appropriate text to be displayed in the 'score' HTML element
     return "Score: " + score;
 }
 
 function getHighscoreDisplayText(highscore, isNew = false) {
+    // Get appropriate text to be displayed in the 'highscore' HTML element
     if (isNew) {
         return "Highscore: <strong>" + highscore + "</strong>"
     }
@@ -292,6 +295,19 @@ function showHappyFace(colour) {
     let buttonDiv = document.getElementById(colour + "Btn");
     buttonDiv.getElementsByClassName('happy')[0].hidden = false;
     buttonDiv.getElementsByClassName('sad')[0].hidden = true;
+}
+
+function handleKeyPress(evt) {
+    switch (evt.key) {
+        case "1":
+        case "2":
+        case "3":
+        case "4":
+            buttonPressed(colours[evt.key - 1]);
+            break;
+        case "Enter":
+            start();
+    }
 }
 
 const failMessages = [
