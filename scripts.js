@@ -1,7 +1,6 @@
-// TODO: Add variety in filler text messages
 // TODO: Add clicks to a process queue to avoid rate limiting
 // TODO: Add key bindings so 1234 can be used instead of clicking
-// TODO: Allow playing with the characters when a game is not in progress
+// TODO: Add mouse click pointer image to first shape
 
 const colours = ['red', 'yellow', 'green', 'blue'];
 let startingColours = [...colours]; // Shallow copy
@@ -18,6 +17,7 @@ let currentSequence = [];
 let inputSequence = [];
 
 let score = 0;
+let gameInProgress = false;
 let acceptingInput = false;
 
 let statusLabel;
@@ -36,10 +36,16 @@ function getElements() {
 
 async function start() {
     // Reset variables and start a new sequence
+    if (gameInProgress) {
+        return;
+    }
+    gameInProgress = true;
+
     score = 0;
     startingColours = [...colours];
     currentSequence = [];
     inputSequence = [];
+
     hideStartButton();
     await showHappyFaces();
     scoreCounter.innerHTML = getScoreDisplayText(score);
@@ -77,7 +83,7 @@ async function displaySequence() {
             await sleep(sleepLength);
         }
     }
-    statusLabel.innerHTML = 'Now repeat what you saw!';
+    statusLabel.innerHTML = randomRepeatMessage();
     acceptingInput = true;
 }
 
@@ -115,7 +121,7 @@ async function buttonPressed(colour) {
 
                 inputSequence = [];
                 currentSequence.push(newColour());
-                statusLabel.innerHTML = "That's right!";
+                statusLabel.innerHTML = randomSuccessMessage();
                 await sleep(1000);
                 statusLabel.innerHTML = 'Watch carefully...';
                 await sleep(600);
@@ -126,12 +132,18 @@ async function buttonPressed(colour) {
             }
         } else {
             // Mistake! End the game.
-            statusLabel.innerHTML = "<em>Oh no! That wasn't right!</em>";
+            statusLabel.innerHTML = "<em>" + randomFailMessage() + "</em>";
             await hideHappyFaces();
-            gameEnd = false;
             await sleep(1000);
             showStartButton();
+            gameInProgress = false;
         }
+    }
+    else if (!gameInProgress) {
+        showHappyFace(colour);
+        setColour(colour);
+        await sleep(300);
+        clearColour(colour);
     }
 
 }
@@ -192,12 +204,58 @@ async function hideHappyFaces() {
 }
 
 async function setFaces(toHappy) {
+    // Set the face that is showing on each shape to the value of the boolean argument
+    // true=happy faces, false=sad faces
     let happyFaces = document.getElementsByClassName("happy");
     let sadFaces = document.getElementsByClassName("sad");
 
     for (let i=0; i<happyFaces.length; i++) {
         happyFaces[i].hidden = !toHappy;
         sadFaces[i].hidden = toHappy;
-        await sleep(100);
+        // await sleep(100);
     }
+}
+
+function showHappyFace(colour) {
+    // Given a colour, set the face on that colour's shape to happy
+    let buttonDiv = document.getElementById(colour + "Btn");
+    buttonDiv.getElementsByClassName('happy')[0].hidden = false;
+    buttonDiv.getElementsByClassName('sad')[0].hidden = true;
+}
+
+const failMessages = [
+    "Oh no! That wasn't right!",
+    "Oops! That wasn't right!",
+    "Oh no! You made a mistake!",
+    "Oops! That was the wrong colour!"
+];
+
+function randomFailMessage() {
+    return pickRandomFromArray(failMessages);
+}
+
+const successMessages = [
+    "That's right!",
+    "Nice memory!",
+    "You got it!",
+    "All right!",
+    "Great work!"
+];
+
+function randomSuccessMessage() {
+    return pickRandomFromArray(successMessages);
+}
+
+const repeatMessages = [
+    "Now repeat what you saw!",
+    "Can you repeat the sequence?"
+];
+
+function randomRepeatMessage() {
+    return pickRandomFromArray(repeatMessages);
+}
+
+function pickRandomFromArray(arr) {
+    // Returns a random item from the given array
+    return arr[Math.floor(Math.random() * arr.length)];
 }

@@ -47,7 +47,7 @@ button {
     background-color:white;
     transition: opacity .5s, width 1s, height .5s, margin .5s;
 }
-button:hover {
+button:hover:not(.fadeout) {
     height: 50px;
     margin: 25px;
 }
