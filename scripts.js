@@ -102,10 +102,6 @@ function getElements() {
     infoDialogBtnDisplayStyle = showInfoDialog.style.display;
 
     document.addEventListener('keydown', (evt) => {handleKeyPress(evt)});
-
-    // TEMPORARY TO BE REMOVED
-    showTheModal();
-    // TEMPORARY TO BE REMOVED
 }
 
 async function start() {
