@@ -97,6 +97,7 @@ function initialiseElements() {
 
     infoDialog = document.getElementById('infoDialog');
     showInfoDialog = document.getElementById("showInfoDialog");
+    constructDialog();
     showInfoDialog.addEventListener('click', _ => {showTheModal()});
     document.getElementById("hideInfoDialog").addEventListener('click', _ => {infoDialog.close()});
     infoDialogBtnDisplayStyle = showInfoDialog.style.display;
@@ -391,6 +392,29 @@ function randomRepeatMessage() {
     return pickRandomFromArray(repeatMessages);
 }
 
+const mouseMessage = "You can use the mouse (or your finger on touchscreen devices) to select the shapes.";
+const fingerMessage = "Use your finger to tap on the shapes in the same order they flash.";
+const keyboardControlsMessage = "Keyboard control is provided as an alternative: Use the Enter key to start, and the numbers 1 through 4 to select each shape. Give these a try before you press Start to make sure you understand how it works!";
+
+function constructDialog() {
+    // Add content to the info modal depending on the screen size
+    let contentSlot = infoDialog.querySelector("#extraContent");
+    if (window.innerWidth < 500) {
+        let newParagraph = document.createElement("p");
+        newParagraph.innerHTML = fingerMessage;
+        contentSlot.appendChild(newParagraph);
+    }
+    else {
+        let newParagraph = document.createElement("p");
+        newParagraph.innerHTML = mouseMessage;
+        contentSlot.appendChild(newParagraph);
+        
+        let newParagraph2 = document.createElement("p");
+        newParagraph2.innerHTML = keyboardControlsMessage;
+        contentSlot.appendChild(newParagraph2);
+    }
+}
+
 const funFacts = [
     "The coloured shapes are inspired by the infamous dancing shapes from the children's TV show 'Mr Maker'",
     "You can play with the shapes when you're not in the middle of a game!",
@@ -400,7 +424,9 @@ const funFacts = [
 ];
 
 function showTheModal() {
-    document.getElementById("funFact").innerHTML = "<strong>Fun fact:</strong> " + pickRandomFromArray(funFacts);
+    // Select a random fun fact, and show the info dialog as a modal
+    document.getElementById("funFact").innerHTML =
+            "<strong>Fun fact:</strong> " + pickRandomFromArray(funFacts);
     infoDialog.showModal();
 }
 
