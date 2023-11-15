@@ -1,5 +1,4 @@
-// TODO: Add a 'hard mode' with 5 colours
-// TODO: Add an info modal to the start page
+// TODO: Add a 'hard mode' with 5 colours -- or 5th colour appears after x points?
 // TODO: Make header fixed so visible when scrolled
 
 class Queue {
