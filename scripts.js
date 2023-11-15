@@ -80,6 +80,9 @@ let acceptingInput = false;
 let statusLabel;
 let scoreCounter;
 let highscoreCounter;
+let infoDialog;
+let showInfoDialog;
+let infoDialogBtnDisplayStyle;
 
 let demoCursor = true;
 
@@ -91,7 +94,18 @@ function getElements() {
     scoreCounter = document.getElementById('score');
     highscoreCounter = document.getElementById('highscore');
     highscoreCounter.innerHTML = getHighscoreDisplayText(localStorage.getItem(highscoreLocalStorageName) || 0);
+
+    infoDialog = document.getElementById('infoDialog');
+    showInfoDialog = document.getElementById("showInfoDialog");
+    showInfoDialog.addEventListener('click', _ => {showTheModal()});
+    document.getElementById("hideInfoDialog").addEventListener('click', _ => {infoDialog.close()});
+    infoDialogBtnDisplayStyle = showInfoDialog.style.display;
+
     document.addEventListener('keydown', (evt) => {handleKeyPress(evt)});
+
+    // TEMPORARY TO BE REMOVED
+    showTheModal();
+    // TEMPORARY TO BE REMOVED
 }
 
 async function start() {
@@ -107,6 +121,9 @@ async function start() {
     inputSequence = [];
     inputQueue.reset();
     demoCursor = true;
+
+    showInfoDialog.style.display = "none";
+    infoDialog.close();
 
     hideStartButton();
     await showHappyFaces();
@@ -221,6 +238,8 @@ async function processInput(colour) {
         await sleep(1000);
         showStartButton();
         gameInProgress = false;
+        
+        showInfoDialog.style.display = infoDialogBtnDisplayStyle;
     }
 }
 
@@ -377,6 +396,19 @@ const repeatMessages = [
 
 function randomRepeatMessage() {
     return pickRandomFromArray(repeatMessages);
+}
+
+const funFacts = [
+    "The coloured shapes are inspired by the infamous dancing shapes from the children's TV show 'Mr Maker'",
+    "You can play with the shapes when you're not in the middle of a game!",
+    "If you get a score of 50, a purple elephant might appear!",
+    "The shapes are called Tobee (red), Obee (green), Jobee (yellow), and Gertrude (blue).",
+    "Some people call this game Simon!"
+];
+
+function showTheModal() {
+    document.getElementById("funFact").innerHTML = "<strong>Fun fact:</strong> " + pickRandomFromArray(funFacts);
+    infoDialog.showModal();
 }
 
 function pickRandomFromArray(arr) {
