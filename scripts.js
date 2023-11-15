@@ -88,7 +88,7 @@ let demoCursor = true;
 
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 
-function getElements() {
+function initialiseElements() {
     // onLoad, fetch elements that we will want to modify
     statusLabel = document.getElementById('status');
     scoreCounter = document.getElementById('score');
@@ -106,9 +106,6 @@ function getElements() {
 
 async function start() {
     // Reset variables and start a new sequence
-    if (gameInProgress) {
-        return;
-    }
     gameInProgress = true;
 
     score = 0;
@@ -358,7 +355,7 @@ function handleKeyPress(evt) {
             buttonPressed(colours[evt.key - 1]);
             break;
         case "Enter":
-            start();
+            if (!gameInProgress) start();
     }
 }
 
